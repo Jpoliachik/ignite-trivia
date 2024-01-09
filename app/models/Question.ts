@@ -1,9 +1,7 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "./helpers/withSetPropAction"
+import shuffle from "lodash.shuffle"
 
-/**
- * Model description here for TypeScript hints.
- */
 export const QuestionModel = types
   .model("Question")
   .props({
@@ -14,17 +12,27 @@ export const QuestionModel = types
     question: types.maybe(types.string),
     correctAnswer: types.maybe(types.string),
     incorrectAnswers: types.optional(types.array(types.string), []),
+    guess: types.maybe(types.string),
   })
   .actions(withSetPropAction)
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((self) => ({
+    get allAnswers() {
+      return shuffle([
+        ...self.incorrectAnswers,
+        ...(self.correctAnswer ? [self.correctAnswer] : []),
+      ])
+    },
+    get isCorrect() {
+      return self.guess === self.correctAnswer
+    },
+  }))
+  .actions((self) => ({
+    setGuess(guess: string) {
+      self.setProp("guess", guess)
+    },
+  }))
 
 export interface Question extends Instance<typeof QuestionModel> {}
 export interface QuestionSnapshotOut extends SnapshotOut<typeof QuestionModel> {}
 export interface QuestionSnapshotIn extends SnapshotIn<typeof QuestionModel> {}
-export const createQuestionDefaultModel = () =>
-  types.optional(QuestionModel, {
-    id: "",
-    type: "multiple",
-    difficulty: "easy",
-  })
+// export const createQuestionDefaultModel = () => types.optional(QuestionModel, {})
