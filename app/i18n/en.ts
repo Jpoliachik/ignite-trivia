@@ -23,6 +23,9 @@ const en = {
       button: "Let's try this again",
     },
   },
+  questionScreen: {
+    title: "Questions",
+  },
 }
 
 export default en
