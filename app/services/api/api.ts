@@ -74,7 +74,7 @@ export class Api {
       const convertedQuestions: QuestionSnapshotOut[] = rawQuestions.map(convertQuestion)
       return { kind: "ok", questions: convertedQuestions }
     } catch (e) {
-      __DEV__ && console.tron.log(e.message)
+      __DEV__ && e instanceof Error && console.tron.log(e.message)
       return { kind: "bad-data" }
     }
   }
