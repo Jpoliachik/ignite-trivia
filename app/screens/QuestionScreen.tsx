@@ -63,7 +63,7 @@ export const QuestionScreen: FC<QuestionScreenProps> = observer(function Questio
   const ObservedQuestion = observer(QuestionComponent)
 
   return (
-    <Screen contentContainerStyle={$root}>
+    <Screen contentContainerStyle={$root} statusBarStyle="light">
       <ListView
         ListHeaderComponent={
           <View style={$header}>
